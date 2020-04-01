@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <div>
+    <p>Current month Pomodoros:</p>
+    <input id="thisMonthPomodoro" type="number" />
+  </div>
+  <div>
+    <p>Last month Pomodoros:</p>
+    <input id="lastMonthPomodoro" type="number" />
+  </div>
+  <div>
+    <p>Current goal:</p>
+    <input id="currentGoal" type="text" />
+  </div>
+
+  <button onClick="myFunction()">Generate</button>
+  <p id="demo">Generating your report...</p>
+  <button onClick="copyParagraph()">Copy</button>
+
+  <script>
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const date = new Date();
+    const lastMonth = date.getMonth() - 1
+
+    const monthNameText = monthNames[lastMonth]
+
+    const pomodorosMinute = pomos => {
+      return `${pomos * 25} minutes`;
+    };
+
+    const copyParagraph = () => {
+      var copyText = document.getElementById("demo");
+      var textArea = document.createElement("textArea");
+      textArea.value = copyText.textContent;
+      console.log(textArea.value);
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      textArea.remove();
+      alert(`Paragraph Copied!`);
+    };
+
+    const myFunction = () => {
+      const thisMonth = document.getElementById("thisMonthPomodoro").value;
+      const thisMonthMinutes = pomodorosMinute(thisMonth);
+      const lastMonth = document.getElementById("lastMonthPomodoro").value;
+      const currentGoal = document.getElementById("currentGoal").value;
+
+      const differenceCal = (thisMonth, lastMonth) => {
+        const diff = thisMonth - lastMonth;
+        let pomodoroMinutes = Math.abs(diff * 25);
+        if (diff < 0) {
+          return `This is a decrease of ${diff *
+            -1} Pomodoro's compared to last month, a difference of ${pomodoroMinutes} minutes.`;
+        } else if (diff === 0) {
+          return `This is the same time as last month.`;
+        } else {
+          return `This is ${diff} more Pomodoro's than last month, an increase in productivity by ${pomodoroMinutes} minutes.`;
+        }
+      };
+
+      const evaluated = differenceCal(thisMonth, lastMonth);
+
+      return (document.getElementById(
+        "demo"
+      ).innerHTML = `I've completed ${thisMonth} Pomodoro's (${thisMonthMinutes}) in ${monthNameText}. ${evaluated} Having reflections allow me to measure how much I've done and what I've accomplished to achieve my goals. It helps me stay accountable in my journey in completing ${currentGoal}`);
+    };
+  </script>
+</body>
+
+</html>
